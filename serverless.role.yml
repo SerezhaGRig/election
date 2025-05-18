@@ -1,0 +1,14 @@
+role:
+  statements:
+    - Effect: "Allow"
+      Action:
+        - s3:*
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - ssm:*
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+      Resource: "*"

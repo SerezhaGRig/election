@@ -1,0 +1,64 @@
+Resources:
+  UserAuthTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: ${self:custom.dynamoDB.deletionPolicy.${self:provider.stage}, self:custom.dynamoDB.deletionPolicy.default}
+    Properties:
+      TableName: user-auth-table-${self:provider.stage}
+      AttributeDefinitions:
+        - AttributeName: 'email'
+          AttributeType: 'S'
+        - AttributeName: 'project'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'email'
+          KeyType: 'HASH'
+        - AttributeName: 'project'
+          KeyType: 'RANGE'
+      BillingMode: 'PAY_PER_REQUEST'
+      Tags:
+        - Key: 'STAGE'
+          Value: ${self:provider.stage}
+  ElectionTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: ${self:custom.dynamoDB.deletionPolicy.${self:provider.stage}, self:custom.dynamoDB.deletionPolicy.default}
+    Properties:
+      TableName: election-table-${self:provider.stage}
+      AttributeDefinitions:
+        - AttributeName: 'electionId'
+          AttributeType: 'S'
+        - AttributeName: 'choiceId'
+          AttributeType: 'S'
+#        - AttributeName: 'count'
+#          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: 'electionId'
+          KeyType: 'HASH'
+        - AttributeName: 'choiceId'
+          KeyType: 'RANGE'
+      BillingMode: 'PAY_PER_REQUEST'
+      Tags:
+        - Key: 'STAGE'
+          Value: ${self:provider.stage}
+  ElectionUserTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: ${self:custom.dynamoDB.deletionPolicy.${self:provider.stage}, self:custom.dynamoDB.deletionPolicy.default}
+    Properties:
+      TableName: election-user-table-${self:provider.stage}
+      AttributeDefinitions:
+        - AttributeName: 'electionId'
+          AttributeType: 'S'
+        - AttributeName: 'email'
+          AttributeType: 'S'
+#        - AttributeName: 'timestamp'
+#          AttributeType: 'N'
+#        - AttributeName: 'choiceId'
+#          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: 'electionId'
+          KeyType: 'HASH'
+        - AttributeName: 'email'
+          KeyType: 'RANGE'
+      BillingMode: 'PAY_PER_REQUEST'
+      Tags:
+        - Key: 'STAGE'
+          Value: ${self:provider.stage}

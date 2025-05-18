@@ -1,0 +1,46 @@
+sendAuthCode:
+  handler: src/lambdas/authentication/sendCode.handler
+  reservedConcurrency: 100
+  events:
+    - http:
+        path: /auth/send/code
+        method: POST
+        cors:
+          origin: '*'
+          headers:
+            - '*'
+validateAuthCode:
+  handler: src/lambdas/authentication/validateAuthCode.handler
+  reservedConcurrency: 100
+  events:
+    - http:
+        path: /auth/validate/code
+        method: POST
+        cors:
+          origin: '*'
+          headers:
+            - '*'
+
+getElection:
+  handler: src/lambdas/election/getElection.handler
+  reservedConcurrency: 100
+  events:
+    - http:
+        path: /election
+        method: GET
+        cors:
+          origin: '*'
+          headers:
+            - '*'
+
+addVoice:
+  handler: src/lambdas/election/addVoice.handler
+  reservedConcurrency: 100
+  events:
+    - http:
+        path: /election
+        method: POST
+        cors:
+          origin: '*'
+          headers:
+            - '*'

@@ -1,0 +1,45 @@
+service: election
+frameworkVersion: '>=3.0.0 <4.0.0'
+
+
+plugins:
+  - serverless-esbuild
+package:
+  individually: true
+  exclude:
+    - node_modules/@types/**/*
+    - node_modules/**/README|CHANGELOG|HISTORY.*
+    - node_modules/**/*.d.ts
+    - node_modules/**/tsconfig.json
+    - node_modules/**/__tests__/*
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${self:custom.currentStage}
+  timeout: 900
+  iam:
+    ${file(./serverless.role.yml)}
+  httpApi:
+    cors: true
+  environment:
+    ${file(./serverless.env.yml):${self:provider.stage}.variables}
+custom:
+  defaultStage: dev
+  currentStage: ${opt:stage, self:custom.defaultStage}
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './tsconfig.json'
+  esbuild:
+    config: ./esbuild.config.js
+  dynamoDB:
+    deletionPolicy:
+      dev: 'Retain'
+      prod: 'Retain'
+      production: 'Retain'
+      default: 'Delete'
+
+functions:
+  ${file(./serverless.functions.yml)}
+resources:
+  - ${file(storageResources.yml)}
