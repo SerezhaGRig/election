@@ -16,3 +16,12 @@ export const getElectionSchema = z
   })
   .strict();
 export type GetElectionSchemaType = z.infer<typeof getElectionSchema>;
+export const getChoiceSchema = z
+  .object({
+    project: z.enum(["bloggers"]),
+    email: z.string(),
+    code: z.string(),
+    electionId: z.string(),
+  })
+  .strict();
+export type GetChoiceSchemaType = z.infer<typeof getChoiceSchema>;

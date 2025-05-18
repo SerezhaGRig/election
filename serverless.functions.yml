@@ -44,3 +44,14 @@ addVoice:
           origin: '*'
           headers:
             - '*'
+getElectionChoice:
+  handler: src/lambdas/election/getChoice.handler
+  reservedConcurrency: 100
+  events:
+    - http:
+        path: /election/choice
+        method: GET
+        cors:
+          origin: '*'
+          headers:
+            - '*'
