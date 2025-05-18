@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: Election Auth API
+  version: 1.0.0
+
+paths:
+  /auth/send/code:
+    post:
+      summary: Send authentication code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project, email]
+              properties:
+                project:
+                  type: string
+                  enum: [bloggers]
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: success
+
+  /auth/validate/code:
+    post:
+      summary: Validate authentication code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project, email, code]
+              properties:
+                project:
+                  type: string
+                  enum: [bloggers]
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                  pattern: '^\d{6}$'
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: success
+
+  /election:
+    get:
+      summary: Get election by ID
+      parameters:
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        description: Total number of votes
+                        example: 42
+                      choices:
+                        type: object
+                        additionalProperties:
+                          type: integer
+                        description: A map of choice IDs to vote counts
+                        example:
+                          choice-1: 18
+                          choice-2: 24
+    post:
+      summary: Add a vote to an election
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [project, email, code, electionId, choiceId]
+              properties:
+                project:
+                  type: string
+                  enum: [bloggers]
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                electionId:
+                  type: string
+                  format: uuid
+                choiceId:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: success
+
+  /election/choice:
+    get:
+      summary: Get a user's election choice
+      parameters:
+        - in: query
+          name: project
+          required: true
+          schema:
+            type: string
+            enum: [bloggers]
+        - in: query
+          name: email
+          required: true
+          schema:
+            type: string
+            format: email
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      choiceId:
+                        type: string
+                      electionId:
+                        type: string
+                      timestamp:
+                        type: string
