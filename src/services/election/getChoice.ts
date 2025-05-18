@@ -26,5 +26,12 @@ export const buildGetChoice =
       },
     });
     const { Item: election } = await ddb.send(getElectionCommand);
-    return election;
+    return (
+      election && {
+        email: election?.email?.S,
+        choiceId: election?.choiceId?.S,
+        electionId: election?.electionId?.S,
+        timestamp: election?.timestamp?.N,
+      }
+    );
   };
