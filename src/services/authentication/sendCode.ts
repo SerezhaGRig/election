@@ -10,6 +10,8 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
+const SENDER_EMAIL = "no-reply@yourdomain.am";
+
 export const sendVerificationEmail = async (email: string, code: string) => {
   const html = `
     <h2>Hello!</h2>
@@ -20,22 +22,12 @@ export const sendVerificationEmail = async (email: string, code: string) => {
 
   const msg = {
     to: email,
-    from: "no-reply@yourdomain.com", // Use a verified sender
+    from: SENDER_EMAIL, // Use a verified sender
     subject: "Your Verification Code",
-    text: `Your verification code is: ${code}. It expires in 10 minutes.`,
+    text: `Your verification code is: ${code}`,
     html,
   };
-
-  try {
-    await sgMail.send(msg);
-    console.log("Verification email sent to", email);
-  } catch (err) {
-    console.error(
-      "Failed to send verification email:",
-      err.response?.body || err.message,
-    );
-    throw err;
-  }
+  await sgMail.send(msg);
 };
 
 export const buildSendAuthCode =
