@@ -5,29 +5,26 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { genPinCode } from "../../utils/helpers";
 import { UserFacingException } from "../../utils/errors";
-
-import sgMail from "@sendgrid/mail";
-
-sgMail.setApiKey(process.env.SENDGRID_KEY);
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 const SENDER_EMAIL = "no-reply@yourdomain.am";
 
 export const sendVerificationEmail = async (email: string, code: string) => {
-  const html = `
-    <h2>Hello!</h2>
-    <p>Your verification code is:</p>
-    <h3 style="color: blue;">${code}</h3>
-    <p>This code will expire in 10 minutes.</p>
-  `;
+  const client = new SESClient({ region: "us-east-1" });
 
-  const msg = {
-    to: email,
-    from: SENDER_EMAIL, // Use a verified sender
-    subject: "Your Verification Code",
-    text: `Your verification code is: ${code}`,
-    html,
-  };
-  await sgMail.send(msg);
+  const command = new SendEmailCommand({
+    Source: SENDER_EMAIL,
+    Destination: {
+      ToAddresses: [email],
+    },
+    Message: {
+      Subject: { Data: "Your Auth Code" },
+      Body: {
+        Text: { Data: `Your code is: ${code}` },
+      },
+    },
+  });
+  return client.send(command);
 };
 
 export const buildSendAuthCode =
