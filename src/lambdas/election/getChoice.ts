@@ -9,15 +9,14 @@ import { buildGetChoice } from "../../services/election/getChoice";
 
 const ddb = new DynamoDBClient({});
 
-const { ELECTION_USER_TABLE } = process.env;
+const { ELECTION_USER_TABLE, USER_AUTH_TABLE } = process.env;
 
 export const logic = async (p: GetChoiceSchemaType) => {
-  const result = await buildGetChoice(ddb, ELECTION_USER_TABLE)(
-    p.email,
-    p.project,
-    p.code,
-    p.electionId,
-  );
+  const result = await buildGetChoice(
+    ddb,
+    ELECTION_USER_TABLE,
+    USER_AUTH_TABLE,
+  )(p.email, p.project, p.code, p.electionId);
   return { data: result, statusCode: 200 };
 };
 

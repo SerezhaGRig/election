@@ -16,7 +16,7 @@ export const buildGetElection =
     let electionCount = 0;
     choices.forEach((choice) => {
       const choiceId = choice?.choiceId?.S;
-      const count = Number.parseInt(choice?.count?.N);
+      const count = Number.parseInt(choice?.voteCount?.N);
       choiceCount[choiceId] = count;
       electionCount += count;
     });

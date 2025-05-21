@@ -51,7 +51,7 @@ export const buildAddVoice =
               electionId: { S: electionId },
               choiceId: { S: choiceId },
             },
-            UpdateExpression: "ADD count :incr",
+            UpdateExpression: "ADD voteCount :incr",
             ExpressionAttributeValues: {
               ":incr": { N: "1" },
             },
@@ -78,7 +78,7 @@ export const buildAddVoice =
             electionId: { S: electionId },
             choiceId: { S: election?.choiceId?.S },
           },
-          UpdateExpression: "ADD count :decr",
+          UpdateExpression: "ADD voteCount :decr",
           ExpressionAttributeValues: {
             ":decr": { N: "-1" },
           },

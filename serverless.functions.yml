@@ -1,6 +1,5 @@
 sendAuthCode:
   handler: src/lambdas/authentication/sendCode.handler
-  reservedConcurrency: 100
   events:
     - http:
         path: /auth/send/code
@@ -11,7 +10,6 @@ sendAuthCode:
             - '*'
 validateAuthCode:
   handler: src/lambdas/authentication/validateAuthCode.handler
-  reservedConcurrency: 100
   events:
     - http:
         path: /auth/validate/code
@@ -23,7 +21,6 @@ validateAuthCode:
 
 getElection:
   handler: src/lambdas/election/getElection.handler
-  reservedConcurrency: 100
   events:
     - http:
         path: /election
@@ -35,7 +32,6 @@ getElection:
 
 addVoice:
   handler: src/lambdas/election/addVoice.handler
-  reservedConcurrency: 100
   events:
     - http:
         path: /election
@@ -46,7 +42,6 @@ addVoice:
             - '*'
 getElectionChoice:
   handler: src/lambdas/election/getChoice.handler
-  reservedConcurrency: 100
   events:
     - http:
         path: /election/choice

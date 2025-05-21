@@ -16,7 +16,7 @@ export const buildValidateAuthCode =
       },
     });
     const getResult = await ddb.send(getItemCommand);
-    if (getResult.Item?.code?.S === code) {
+    if (!(getResult.Item?.code?.S === code)) {
       throw new UnauthorizedException();
     }
     const putItemCommand = new PutItemCommand({

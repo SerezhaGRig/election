@@ -2,13 +2,13 @@ import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { UnauthorizedException } from "../../utils/errors";
 
 export const buildGetChoice =
-  (ddb: DynamoDBClient, electionUserTable: string) =>
+  (ddb: DynamoDBClient, electionUserTable: string, userTable: string) =>
   async (email: string, project: string, code: string, electionId: string) => {
     const getItemCommand = new GetItemCommand({
-      TableName: electionUserTable,
+      TableName: userTable,
       Key: {
-        electionId: { S: project },
-        email: { S: email },
+        project: { S: project },
+        email: { S: decodeURIComponent(email) },
       },
     });
     const getResult = await ddb.send(getItemCommand);

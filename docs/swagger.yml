@@ -3,6 +3,9 @@ info:
   title: Election Auth API
   version: 1.0.0
 
+servers:
+  - url: https://tiq95l4rsa.execute-api.us-east-1.amazonaws.com/development
+
 paths:
   /auth/send/code:
     post:
@@ -80,7 +83,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         '200':
           description: successfully
@@ -124,10 +126,8 @@ paths:
                   type: string
                 electionId:
                   type: string
-                  format: uuid
                 choiceId:
                   type: string
-                  format: uuid
       responses:
         '200':
           description: successfully
@@ -169,7 +169,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         '200':
           description: successfully

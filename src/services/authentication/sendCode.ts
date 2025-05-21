@@ -56,5 +56,5 @@ export const buildSendAuthCode =
       },
     });
     await ddb.send(putItemCommand);
-    await sendVerificationEmail(email, code);
+    // await sendVerificationEmail(email, code);
   };
