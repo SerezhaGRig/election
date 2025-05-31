@@ -12,3 +12,7 @@ role:
       Action:
         - dynamodb:*
       Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - ses:*
+      Resource: "*"

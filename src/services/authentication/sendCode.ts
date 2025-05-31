@@ -7,7 +7,7 @@ import { genPinCode } from "../../utils/helpers";
 import { UserFacingException } from "../../utils/errors";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
-const SENDER_EMAIL = "no-reply@yourdomain.am";
+const SENDER_EMAIL = "election@bloggersawards.com";
 
 export const sendVerificationEmail = async (email: string, code: string) => {
   const client = new SESClient({ region: "us-east-1" });
@@ -56,5 +56,5 @@ export const buildSendAuthCode =
       },
     });
     await ddb.send(putItemCommand);
-    // await sendVerificationEmail(email, code);
+    await sendVerificationEmail(email, code);
   };
