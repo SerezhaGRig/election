@@ -5,26 +5,39 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { genPinCode } from "../../utils/helpers";
 import { UserFacingException } from "../../utils/errors";
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import {
+  Configuration,
+  EmailsApi,
+  EmailMessageData,
+} from "@elasticemail/elasticemail-client-ts-axios";
 
 const SENDER_EMAIL = "election@bloggersawards.com";
+const config = new Configuration({
+  apiKey: process.env.ELASTIC_EMAIL_KEY,
+});
+
+const emailsApi = new EmailsApi(config);
 
 export const sendVerificationEmail = async (email: string, code: string) => {
-  const client = new SESClient({ region: "us-east-1" });
-
-  const command = new SendEmailCommand({
-    Source: SENDER_EMAIL,
-    Destination: {
-      ToAddresses: [email],
-    },
-    Message: {
-      Subject: { Data: "Your Auth Code" },
-      Body: {
-        Text: { Data: `Your code is: ${code}` },
+  const emailMessageData: EmailMessageData = {
+    Recipients: [
+      {
+        Email: email,
       },
+    ],
+    Content: {
+      Body: [
+        {
+          ContentType: "PlainText",
+          Charset: "utf-8",
+          Content: `Your code is: ${code}`,
+        },
+      ],
+      From: SENDER_EMAIL,
+      Subject: "Your Auth Code",
     },
-  });
-  return client.send(command);
+  };
+  return emailsApi.emailsPost(emailMessageData);
 };
 
 export const buildSendAuthCode =
