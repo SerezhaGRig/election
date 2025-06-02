@@ -29,7 +29,7 @@ export const sendVerificationEmail = async (email: string, code: string) => {
 
 export const buildSendAuthCode =
   (ddb: DynamoDBClient, table: string) =>
-  async (email: string, project: string) => {
+  async (email: string, project: string, type?: "registration" | "restore") => {
     const code = genPinCode(4);
     const getItemCommand = new GetItemCommand({
       TableName: table,
@@ -39,10 +39,17 @@ export const buildSendAuthCode =
       },
     });
     const getResult = await ddb.send(getItemCommand);
-    if (getResult.Item?.isVerified?.BOOL === true) {
+    if (getResult.Item?.isVerified?.BOOL === true && type !== "restore") {
       throw new UserFacingException({
         error: "RegisteredError",
         message: "Already Registered",
+        statusCode: 409,
+      });
+    }
+    if (type === "restore" && getResult.Item?.isVerified?.BOOL === false) {
+      throw new UserFacingException({
+        error: "RegisteredError",
+        message: "Code is already sent",
         statusCode: 409,
       });
     }

@@ -12,6 +12,7 @@ export const authValidateCodeSchema = z
     project: z.enum(["bloggers"]),
     email: z.string(),
     code: z.string(),
+    type: z.enum(["registration", "restore"]).optional(),
   })
   .strict();
 export type AuthValidateCodeSchemaType = z.infer<typeof authValidateCodeSchema>;
