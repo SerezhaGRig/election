@@ -5,26 +5,21 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { genPinCode } from "../../utils/helpers";
 import { UserFacingException } from "../../utils/errors";
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import sgMail from "@sendgrid/mail";
+
+sgMail.setApiKey(process.env.EMAIL_KEY!);
 
 const SENDER_EMAIL = "election@bloggersawards.com";
 
 export const sendVerificationEmail = async (email: string, code: string) => {
-  const client = new SESClient({ region: "us-east-1" });
+  const msg = {
+    to: email,
+    from: SENDER_EMAIL,
+    subject: "Your Auth Code",
+    text: `Your code is: ${code}`,
+  };
 
-  const command = new SendEmailCommand({
-    Source: SENDER_EMAIL,
-    Destination: {
-      ToAddresses: [email],
-    },
-    Message: {
-      Subject: { Data: "Your Auth Code" },
-      Body: {
-        Text: { Data: `Your code is: ${code}` },
-      },
-    },
-  });
-  return client.send(command);
+  await sgMail.send(msg);
 };
 
 export const buildSendAuthCode =
