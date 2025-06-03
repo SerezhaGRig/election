@@ -21,6 +21,9 @@ paths:
                 project:
                   type: string
                   enum: [bloggers]
+                type:
+                  type: string
+                  enum: [ restore, registration ]
                 email:
                   type: string
                   format: email
