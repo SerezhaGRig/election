@@ -7,9 +7,9 @@ import { genPinCode } from "../../utils/helpers";
 import { UserFacingException } from "../../utils/errors";
 import sgMail from "@sendgrid/mail";
 
-sgMail.setApiKey(process.env.EMAIL_KEY!);
+sgMail.setApiKey(process.env.EMAIL_KEY);
 
-const SENDER_EMAIL = "election@bloggersawards.com";
+const SENDER_EMAIL = "election@mail.bloggersawards.com";
 
 export const sendVerificationEmail = async (email: string, code: string) => {
   const msg = {
